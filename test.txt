@@ -1,0 +1,50 @@
+function myFunction() {
+  var sheet = SpreadsheetApp.getActiveSheet(); 
+  var lastRow = sheet.getLastRow();
+  var lastCol = sheet.getLastColumn();
+  
+  var date = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy/MM/dd HH:mm:ss');
+  var writeValue = [["","","処理開始中 " + date]];
+   
+  var testval = sheet.getRange(1, 1,lastRow,4).getDisplayValues();  
+  
+  
+  var listTest = [];
+  for (var i=0; i<testval.length; i++){
+    if (testval[i][0] == 1 && testval[i][1] == "TEST") {    
+      var rowValues = sheet.getRange(i+1,1,1,lastCol).getDisplayValues();
+      listTest.push(rowValues[0]);
+      
+      sheet.getRange(i+1,1,1,3).setValues(writeValue);
+    
+    }
+  }
+
+  for (var i=0; i<testval.length; i++){
+    if (testval[i][0] == 2 && testval[i][1] == "TEST") {    
+      var rowValues = sheet.getRange(i+1,1,1,lastCol).getDisplayValues();
+      listTest.push(rowValues[0]);
+    }
+  }
+  
+  //引数用変数  
+  var strTest = "";
+  for (var i=0; i<listTest.length; i++){
+  
+    //要素の2個目以降!s2!区切りで追記する
+    if (i > 0){
+      strTest = strTest + "!s2!" ;
+    }
+    
+    //行のデータを!s1!区切りで追記する
+    for (var c=0; c <listTest[i].length; c++){
+      if (c > 0){
+        strTest = strTest + "!s1!";
+      }
+      strTest = strTest + listTest[i][c];
+    }
+  }   
+  
+  Browser.msgBox(strTest);
+  
+}
